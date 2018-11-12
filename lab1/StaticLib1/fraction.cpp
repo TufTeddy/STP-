@@ -2,7 +2,15 @@
 #include "fraction.h"
 
 Fraction::Fraction(std::string FractionString) {
-	this->convertStringToFraction(FractionString);
+	std::size_t pos = FractionString.find("/");
+
+	if (pos != std::string::npos) {
+		this->numerator = atol(FractionString.substr(0, pos).c_str());
+		this->denominator = atol(FractionString.substr(pos + 1).c_str());
+	} else {
+		this->numerator = atol(FractionString.c_str());
+		this->denominator = 1;
+	}
 }
 
 Fraction Fraction::operator = (const Fraction &firstFrac)
@@ -171,23 +179,6 @@ void Fraction::reduction()
 	this->denominator /= temp;
 }
 
-bool Fraction::convertStringToFraction(std::string FractionString) {
-	std::size_t pos = FractionString.find("/");
-
-	if (pos != std::string::npos) {
-		try {
-			this->numerator = atol(FractionString.substr(0, pos).c_str());
-			this->denominator = atol(FractionString.substr(pos + 1).c_str());
-		}
-		catch (...) {
-			return false;
-		}
-
-		return (this->denominator == 0) ? false : true;
-	}
-
-	return false;
-}
 
 Fraction Fraction::sum(Fraction firstFrac, Fraction secondFrac) {
 
@@ -264,6 +255,7 @@ std::string Fraction::getFracString() {
 	char tmp[10];
 	_itoa_s(this->numerator, tmp, 10);
 	std::string str = tmp;
+	str += '/';
 	_itoa_s(this->denominator, tmp, 10);
 	str += tmp;
 	return str;

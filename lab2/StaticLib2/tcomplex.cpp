@@ -3,6 +3,7 @@
 #include <cmath>
 //#define _USE_MATH_DEFINES
 
+
 TComplex TComplex::copy(TComplex complex)
 {
 	return TComplex(complex.real, complex.imaginary);
@@ -176,6 +177,7 @@ std::string TComplex::getComplexStr()
 	std::string imaginaryTempString = std::to_string(imaginary);
 	realTempString += imaginaryTempString;
 	return realTempString;
+
 }
 
 bool TComplex::convertStringToComplex(std::string complexString)

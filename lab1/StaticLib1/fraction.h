@@ -41,7 +41,6 @@ public:
 	void reduction();
 	Fraction operator = (const Fraction &firstFrac);
 
-	bool convertStringToFraction(std::string FractionString);
 	Fraction sum(Fraction, Fraction);
 	Fraction multi(Fraction, Fraction);
 	Fraction divide(Fraction, Fraction);
