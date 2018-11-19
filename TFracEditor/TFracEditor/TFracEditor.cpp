@@ -68,7 +68,7 @@ void TFracEditor::setNumber(std::string &num) {
 	bool flag = true;
 	uint32_t minus_c = 0, plus_c = 0;
 	for (auto &i : num) {
-		if ((i >= 48 && i <= 57) || i == 43 || i == 45) {
+		if ((i >= 48 && i <= 57) || i == 43 || i == 45 || i == 47) {
 			if (i == 43) {
 				minus_c++;
 				if (minus_c > 2) {

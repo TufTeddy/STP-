@@ -68,10 +68,10 @@ void TPNumberEditor::setNumber(std::string &num) {
 	bool flag = true;
 	uint32_t minus_c = 0, plus_c = 0;
 	for (auto &i : num) {
-		if ((i >= 48 && i < 57) || i == 43 || i == 45 || (i >= 64 && i <= 70)) {
+		if ((i >= 48 && i < 57) || i == 43 || i == 45 || i == 46 || (i >= 64 && i <= 70)) {
 			if (i == 43) {
 				minus_c++;
-				if (minus_c > 2) {
+				if (minus_c > 1) {
 					flag = false;
 					break;
 				}
@@ -79,7 +79,7 @@ void TPNumberEditor::setNumber(std::string &num) {
 			else {
 				if (i == 45) {
 					plus_c++;
-					if (plus_c > 2) {
+					if (plus_c > 1) {
 						flag = false;
 						break;
 					}
