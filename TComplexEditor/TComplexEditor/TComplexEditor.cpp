@@ -34,10 +34,12 @@ std::string TComplexEditor::changeSign() {
 
 std::string TComplexEditor::addDigit(unsigned int digit) {
 	auto pos = isRealPartEditing ? 0 : number.find('*') + 1;
-	if (number[pos] == '0') {
-		number.pop_back();
+	if (digit >= 0 && digit < 10){
+		if (number[pos] == '0') {
+			number.pop_back();
+		}
+		number += (char)('0' + digit);
 	}
-	number += (char)('0' + digit);
 	return number;
 }
 
@@ -80,7 +82,36 @@ std::string TComplexEditor::addSplit() {
 
 
 void TComplexEditor::setNumber(std::string &num) {
-	number = TComplex(num).getComplexStr();
+	bool flag = true;
+	uint32_t minus_c = 0, plus_c = 0;
+	for (auto &i : num) {
+		if ((i >= 48 && i <= 57) || i == 43 || i == 45) {
+			if (i == 43) {
+				minus_c++;
+				if (minus_c > 2) {
+					flag = false;
+					break;
+				}
+			}
+			else {
+				if (i == 45) {
+					plus_c++;
+					if (plus_c > 2) {
+						flag = false;
+						break;
+					}
+				}
+			}
+		}
+		else {
+			flag = false;
+			break;
+		}
+	}
+	if (flag)
+		number = TComplex(num).getComplexStr();
+	else
+		number = TComplex("0").getComplexStr();
 }
 
 

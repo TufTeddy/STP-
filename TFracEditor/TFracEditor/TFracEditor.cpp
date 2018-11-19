@@ -27,10 +27,12 @@ std::string TFracEditor::changeSign() {
 
 
 std::string TFracEditor::addDigit(unsigned int digit) {
-	if (number == "0") {
-		number = "";
+	if (digit >= 0 && digit < 10) {
+		if (number == "0") {
+			number = "";
+		}
+		number += (char)('0' + digit);
 	}
-	number += (char)('0' + digit);
 	return number;
 }
 
@@ -63,7 +65,37 @@ std::string TFracEditor::addSplit() {
 
 
 void TFracEditor::setNumber(std::string &num) {
-	number = Fraction(num).getFracString();
+	bool flag = true;
+	uint32_t minus_c = 0, plus_c = 0;
+	for (auto &i : num) {
+		if ((i >= 48 && i <= 57) || i == 43 || i == 45) {
+			if (i == 43) {
+				minus_c++;
+				if (minus_c > 2) {
+					flag = false;
+					break;
+				}
+			}
+			else {
+				if (i == 45) {
+					plus_c++;
+					if (plus_c > 2) {
+						flag = false;
+						break;
+					}
+				}
+			}
+		}
+		else {
+			flag = false;
+			break;
+		}
+	}
+	if (flag)
+		number = Fraction(num).getFracString();
+	else
+		number = Fraction("0").getFracString();
+	
 }
 
 
