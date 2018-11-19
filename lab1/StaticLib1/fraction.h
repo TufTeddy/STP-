@@ -49,6 +49,14 @@ public:
 	void reroll();
 	Fraction copy(Fraction);
 
+	bool operator< (const Fraction & anotherFrac) const {
+		if (float(this->numerator) / float(this->denominator)
+			< float(anotherFrac.numerator) / float(anotherFrac.denominator))
+			return true;
+		else
+			return false;
+	}
+
 
 	/*
 	friend Fraction operator + (const Fraction &firstFrac, const Fraction &secondFrac);
