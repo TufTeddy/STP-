@@ -35,7 +35,7 @@ namespace TComplexEditorTest
 			TComplexEditor test;
 			test.addDigit(5);
 			test.addZero();
-			Assert::AreEqual(test.getNumber(), std::to_string(5.0) + " + i*" + std::to_string(0.0));
+			Assert::AreEqual(test.getNumber(), std::to_string(50.0) + " + i*" + std::to_string(0.0));
 			test.addSplit();
 			test.addZero();
 			test.addDigit(2);

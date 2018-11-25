@@ -68,6 +68,11 @@ namespace TFracEditorTest
 			std::string number = "3/1";
 			test.setNumber(number);
 			Assert::AreEqual(test.getNumber(), (std::string)"3/1");
+			number.clear();
+			TFracEditor test2;
+			number = "-1-1";
+			test.setNumber(number);
+			Assert::AreEqual(test2.getNumber(), (std::string)"0/1");
 		}
 
 
