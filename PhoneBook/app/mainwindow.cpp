@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
             QByteArray line = contactsFile->readLine();
             QList<QByteArray> fields = line.split(',');
             for (int idx = 0; idx < fields.size(); idx += 2) {
-                QString record = QString("ÔÈÎ: %1\tÒåë: %2").arg(QString(fields[idx])).arg(QString(fields[idx + 1]).trimmed());
+                QString record = QString("FIO: %1\tPhn: %2").arg(QString(fields[idx])).arg(QString(fields[idx + 1]).trimmed());
                 book.insert(fields[idx].toStdString(), fields[idx + 1].toStdString());
                 ui->contactList->addItem(record);
             }
@@ -75,7 +75,7 @@ void MainWindow::on_changeButton_clicked()
         book.change(name.toStdString(), phoneNumber.toStdString());
         QList<QListWidgetItem *> items = ui->contactList->findItems(QString("ÔÈÎ: %1").arg(name), Qt::MatchStartsWith);
         if (!items.empty()) {
-            items[0]->setText(QString("ÔÈÎ: %1\tÒåë: %2").arg(name).arg(phoneNumber));
+            items[0]->setText(QString("FIO: %1\tPhn: %2").arg(name).arg(phoneNumber));
             items.removeFirst();
 
             for (auto item: items) {
@@ -94,7 +94,7 @@ void MainWindow::on_addButton_clicked()
     QString phoneNumber = ui->numberField->text();
     if (!(name.isEmpty() || phoneNumber.isEmpty())) {
         book.insert(name.toStdString(), phoneNumber.toStdString());
-        ui->contactList->addItem(QString("ÔÈÎ: %1\tÒåë: %2").arg(name).arg(phoneNumber));
+        ui->contactList->addItem(QString("FIO: %1\tPhn: %2").arg(name).arg(phoneNumber));
         ui->nameField->clear();
         ui->numberField->clear();
     }
