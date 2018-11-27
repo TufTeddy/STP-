@@ -66,15 +66,22 @@ std::string TFracEditor::addSplit() {
 
 void TFracEditor::setNumber(std::string &num) {
 	bool flag = true;
+	int slash_c = 0;
 	for (auto i = 0; i < num.size(); ++i) {
 		if ((num[i] >= 48 && num[i] <= 57) || num[i] == '-' || num[i] == '+' || num[i] == '/') {
 			if (num[i] == '-') {
-				if (i != 0 && i != num.find('/') + 1){
+				if (i != 0 && i != num.find('/') + 1) {
 					flag = false;
 				}
 			}
 			else if (num[i] == '+') {
 				if (i != 0 && i != num.find('/') + 1) {
+					flag = false;
+				}
+			}
+			else if (num[i] == '/') {
+				slash_c++;
+				if (slash_c > 1) {
 					flag = false;
 				}
 			}
@@ -88,7 +95,7 @@ void TFracEditor::setNumber(std::string &num) {
 		number = Fraction(num).getFracString();
 	else
 		number = Fraction("0").getFracString();
-	
+
 }
 
 
