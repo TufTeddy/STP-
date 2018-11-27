@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    contactsFile = new QFile("/home/fnick/Repos/ModernProgramming/PhoneBook/app/res/contacts.csv");
+    contactsFile = new QFile("./res/contacts.csv");
     if (!contactsFile->open(QIODevice::ReadOnly)) {
         qDebug() << contactsFile->errorString();
         qDebug() << contactsFile->error();
@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
             QByteArray line = contactsFile->readLine();
             QList<QByteArray> fields = line.split(',');
             for (int idx = 0; idx < fields.size(); idx += 2) {
-                QString record = QString("Ð¤Ð˜Ðž: %1\tÐ¢ÐµÐ»: %2").arg(QString(fields[idx])).arg(QString(fields[idx + 1]).trimmed());
+                QString record = QString("ÔÈÎ: %1\tÒåë: %2").arg(QString(fields[idx])).arg(QString(fields[idx + 1]).trimmed());
                 book.insert(fields[idx].toStdString(), fields[idx + 1].toStdString());
                 ui->contactList->addItem(record);
             }
@@ -73,9 +73,9 @@ void MainWindow::on_changeButton_clicked()
     QString phoneNumber = ui->nameField->text();
     if (!(name.isEmpty() || phoneNumber.isEmpty())) {
         book.change(name.toStdString(), phoneNumber.toStdString());
-        QList<QListWidgetItem *> items = ui->contactList->findItems(QString("Ð¤Ð˜Ðž: %1").arg(name), Qt::MatchStartsWith);
+        QList<QListWidgetItem *> items = ui->contactList->findItems(QString("ÔÈÎ: %1").arg(name), Qt::MatchStartsWith);
         if (!items.empty()) {
-            items[0]->setText(QString("Ð¤Ð˜Ðž: %1\tÐ¢ÐµÐ»: %2").arg(name).arg(phoneNumber));
+            items[0]->setText(QString("ÔÈÎ: %1\tÒåë: %2").arg(name).arg(phoneNumber));
             items.removeFirst();
 
             for (auto item: items) {
@@ -94,7 +94,7 @@ void MainWindow::on_addButton_clicked()
     QString phoneNumber = ui->numberField->text();
     if (!(name.isEmpty() || phoneNumber.isEmpty())) {
         book.insert(name.toStdString(), phoneNumber.toStdString());
-        ui->contactList->addItem(QString("Ð¤Ð˜Ðž: %1\tÐ¢ÐµÐ»: %2").arg(name).arg(phoneNumber));
+        ui->contactList->addItem(QString("ÔÈÎ: %1\tÒåë: %2").arg(name).arg(phoneNumber));
         ui->nameField->clear();
         ui->numberField->clear();
     }
