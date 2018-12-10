@@ -4,6 +4,10 @@
 #include <QFile>
 #include <QDebug>
 #include <QString>
+#include <QCoreApplication>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QString>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    contactsFile = new QFile("./res/contacts.csv");
+    contactsFile = new QFile(QCoreApplication::applicationDirPath() + "/contacts.csv");
     if (!contactsFile->open(QIODevice::ReadOnly)) {
         qDebug() << contactsFile->errorString();
         qDebug() << contactsFile->error();
@@ -19,9 +23,22 @@ MainWindow::MainWindow(QWidget *parent) :
         QStringList wordList;
         while (!contactsFile->atEnd()) {
             QByteArray line = contactsFile->readLine();
+
+            bool trig = false;
+            for (int i = 0; i < line.length(); i++)
+            {
+                if ( (line[i] == ',') && (trig) )
+                {
+                    line.remove(i, 1);
+                }
+                else if ((line[i] == ',') && (!trig))
+                {
+                    trig = true;
+                }
+            }
             QList<QByteArray> fields = line.split(',');
             for (int idx = 0; idx < fields.size(); idx += 2) {
-                QString record = QString("FIO: %1\tPhn: %2").arg(QString(fields[idx])).arg(QString(fields[idx + 1]).trimmed());
+                QString record = QString("ФИО: %1\tТел: %2").arg(QString(fields[idx])).arg(QString(fields[idx + 1]).trimmed());
                 book.insert(fields[idx].toStdString(), fields[idx + 1].toStdString());
                 ui->contactList->addItem(record);
             }
@@ -66,16 +83,16 @@ void MainWindow::on_deleteButton_clicked()
         delete selectedItems[idx];
     }
 }
-
+/*
 void MainWindow::on_changeButton_clicked()
 {
     QString name = ui->nameField->text();
     QString phoneNumber = ui->nameField->text();
     if (!(name.isEmpty() || phoneNumber.isEmpty())) {
         book.change(name.toStdString(), phoneNumber.toStdString());
-        QList<QListWidgetItem *> items = ui->contactList->findItems(QString("���: %1").arg(name), Qt::MatchStartsWith);
+        QList<QListWidgetItem *> items = ui->contactList->findItems(QString("ФИО: %1").arg(name), Qt::MatchStartsWith);
         if (!items.empty()) {
-            items[0]->setText(QString("FIO: %1\tPhn: %2").arg(name).arg(phoneNumber));
+            items[0]->setText(QString("ФИО: %1\tТел: %2").arg(name).arg(phoneNumber));
             items.removeFirst();
 
             for (auto item: items) {
@@ -86,16 +103,85 @@ void MainWindow::on_changeButton_clicked()
         ui->nameField->clear();
         ui->numberField->clear();
     }
+}*/
+
+void MainWindow::on_changeButton_clicked()
+{
+    QList<QListWidgetItem *> selectedItems = ui->contactList->selectedItems();
+    for (int idx = 0; idx < selectedItems.size(); ++idx) {
+        QStringList fields = selectedItems[idx]->text().split('\t');
+        QString name = fields[0];
+        QString phoneNumber = fields[1];
+        name.remove(0, 4);
+        phoneNumber.remove(0, 4);
+
+
+        nameLineEdit = new QLineEdit(name);
+        phoneNumberLineEdit = new QLineEdit(phoneNumber);
+        acceptChanges = new QPushButton("Изменить");
+        decline = new QPushButton("Отмена");
+
+        changeWidget = new QWidget();
+        QVBoxLayout *vertLayout = new QVBoxLayout();
+        QHBoxLayout *nameLayout = new QHBoxLayout();
+        QHBoxLayout *phoneNumberLayout = new QHBoxLayout();
+        nameLayout->addWidget(new QLabel("ФИО:"));
+        nameLayout->addWidget(nameLineEdit);
+        phoneNumberLayout->addWidget(new QLabel("Телефон:"));
+        phoneNumberLayout->addWidget(phoneNumberLineEdit);
+        vertLayout->addLayout(nameLayout);
+        vertLayout->addLayout(phoneNumberLayout);
+        vertLayout->addWidget(acceptChanges);
+        vertLayout->addWidget(decline);
+
+        connect(acceptChanges, &QPushButton::clicked, this, &MainWindow::acceptChangesSlot);
+        connect(decline, &QPushButton::clicked, changeWidget, &QWidget::close);
+
+        changeWidget->show();
+
+        changeWidget->setLayout(vertLayout);
+        book.remove(fields[0].toStdString());
+        ui->contactList->removeItemWidget(selectedItems[idx]);
+        delete selectedItems[idx];
+    }
 }
 
 void MainWindow::on_addButton_clicked()
 {
     QString name = ui->nameField->text();
     QString phoneNumber = ui->numberField->text();
+
+    for (int i = 0; i < name.length(); i++)
+    {
+        if (name[i] == ',') name.remove(i, 1);
+    }
+    for (int i = 0; i < phoneNumber.length(); i++)
+    {
+        if (phoneNumber[i] == ',') phoneNumber.remove(i, 1);
+    }
+
     if (!(name.isEmpty() || phoneNumber.isEmpty())) {
         book.insert(name.toStdString(), phoneNumber.toStdString());
-        ui->contactList->addItem(QString("FIO: %1\tPhn: %2").arg(name).arg(phoneNumber));
+        ui->contactList->addItem(QString("ФИО: %1\tТел: %2").arg(name).arg(phoneNumber));
         ui->nameField->clear();
         ui->numberField->clear();
     }
+}
+
+void MainWindow::acceptChangesSlot()
+{
+    QString name = nameLineEdit->text();
+    QString phoneNumber = phoneNumberLineEdit->text();
+
+    for (int i = 0; i < name.length(); i++)
+    {
+        if (name[i] == ',') name.remove(i, 1);
+    }
+    for (int i = 0; i < phoneNumber.length(); i++)
+    {
+        if (phoneNumber[i] == ',') phoneNumber.remove(i, 1);
+    }
+
+    book.insert(name.toStdString(), phoneNumber.toStdString());
+    ui->contactList->addItem(QString("ФИО: %1\tТел: %2").arg(name).arg(phoneNumber));
 }

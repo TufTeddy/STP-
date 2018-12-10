@@ -4,6 +4,8 @@
 #include <QFile>
 #include <QMainWindow>
 #include "addressbook.h"
+#include <QLineEdit>
+#include <QPushButton>
 
 namespace Ui {
 class MainWindow;
@@ -28,11 +30,18 @@ private slots:
 
     void on_addButton_clicked();
 
+    void acceptChangesSlot();
 private:
     Ui::MainWindow *ui;
 
     AddressBook book;
     QFile *contactsFile;
+    QWidget *changeWidget;
+
+    QLineEdit *nameLineEdit;
+    QLineEdit *phoneNumberLineEdit;
+    QPushButton *acceptChanges;
+    QPushButton *decline;
 };
 
 #endif // MAINWINDOW_H
