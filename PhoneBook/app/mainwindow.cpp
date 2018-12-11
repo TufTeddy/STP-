@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
             }
             QList<QByteArray> fields = line.split(',');
             for (int idx = 0; idx < fields.size(); idx += 2) {
-                QString record = QString("–§–ò–û: %1\t–¢–µ–ª: %2").arg(QString(fields[idx])).arg(QString(fields[idx + 1]).trimmed());
+                QString record = QString("‘»Œ: %1\t“ÂÎ: %2").arg(QString(fields[idx])).arg(QString(fields[idx + 1]).trimmed());
                 book.insert(fields[idx].toStdString(), fields[idx + 1].toStdString());
                 ui->contactList->addItem(record);
             }
@@ -118,16 +118,16 @@ void MainWindow::on_changeButton_clicked()
 
         nameLineEdit = new QLineEdit(name);
         phoneNumberLineEdit = new QLineEdit(phoneNumber);
-        acceptChanges = new QPushButton("–ò–∑–º–µ–Ω–∏—Ç—å");
-        decline = new QPushButton("–û—Ç–º–µ–Ω–∞");
+        acceptChanges = new QPushButton("»ÁÏÂÌËÚ¸");
+        decline = new QPushButton("ŒÚÏÂÌ‡");
 
         changeWidget = new QWidget();
         QVBoxLayout *vertLayout = new QVBoxLayout();
         QHBoxLayout *nameLayout = new QHBoxLayout();
         QHBoxLayout *phoneNumberLayout = new QHBoxLayout();
-        nameLayout->addWidget(new QLabel("–§–ò–û:"));
+        nameLayout->addWidget(new QLabel("‘»Œ:"));
         nameLayout->addWidget(nameLineEdit);
-        phoneNumberLayout->addWidget(new QLabel("–¢–µ–ª–µ—Ñ–æ–Ω:"));
+        phoneNumberLayout->addWidget(new QLabel("“ÂÎÂÙÓÌÌ˚È ÌÓÏÂ:"));
         phoneNumberLayout->addWidget(phoneNumberLineEdit);
         vertLayout->addLayout(nameLayout);
         vertLayout->addLayout(phoneNumberLayout);
@@ -138,11 +138,6 @@ void MainWindow::on_changeButton_clicked()
         connect(decline, &QPushButton::clicked, changeWidget, &QWidget::close);
 
         changeWidget->show();
-
-        changeWidget->setLayout(vertLayout);
-        book.remove(fields[0].toStdString());
-        ui->contactList->removeItemWidget(selectedItems[idx]);
-        delete selectedItems[idx];
     }
 }
 
@@ -162,7 +157,7 @@ void MainWindow::on_addButton_clicked()
 
     if (!(name.isEmpty() || phoneNumber.isEmpty())) {
         book.insert(name.toStdString(), phoneNumber.toStdString());
-        ui->contactList->addItem(QString("–§–ò–û: %1\t–¢–µ–ª: %2").arg(name).arg(phoneNumber));
+        ui->contactList->addItem(QString("‘»Œ: %1\t“ÂÎ: %2").arg(name).arg(phoneNumber));
         ui->nameField->clear();
         ui->numberField->clear();
     }
@@ -182,6 +177,13 @@ void MainWindow::acceptChangesSlot()
         if (phoneNumber[i] == ',') phoneNumber.remove(i, 1);
     }
 
+
+    changeWidget->setLayout(vertLayout);
+    book.remove(fields[0].toStdString());
+    ui->contactList->removeItemWidget(selectedItems[idx]);
+    delete selectedItems[idx];
+        
     book.insert(name.toStdString(), phoneNumber.toStdString());
-    ui->contactList->addItem(QString("–§–ò–û: %1\t–¢–µ–ª: %2").arg(name).arg(phoneNumber));
+    ui->contactList->addItem(QString("‘»Œ: %1\“ÂÎ: %2").arg(name).arg(phoneNumber));
 }
+
