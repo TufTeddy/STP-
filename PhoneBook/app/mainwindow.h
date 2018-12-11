@@ -6,7 +6,7 @@
 #include "addressbook.h"
 #include <QLineEdit>
 #include <QPushButton>
-
+#include <QListWidgetItem>
 namespace Ui {
 class MainWindow;
 }
@@ -31,7 +31,7 @@ private slots:
     void on_addButton_clicked();
 
     void acceptChangesSlot();
-    void declineChangesSlot();
+//    void declineChangesSlot();
 private:
     Ui::MainWindow *ui;
 
@@ -43,6 +43,7 @@ private:
     QLineEdit *phoneNumberLineEdit;
     QPushButton *acceptChanges;
     QPushButton *decline;
+    QList<QListWidgetItem *> currentSellect;
     
     bool deletePhone;
 };

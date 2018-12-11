@@ -110,6 +110,7 @@ void MainWindow::on_changeButton_clicked()
 	deletePhone = false;
 	
     QList<QListWidgetItem *> selectedItems = ui->contactList->selectedItems();
+    currentSellect = selectedItems;
     for (int idx = 0; idx < selectedItems.size(); ++idx) {
         QStringList fields = selectedItems[idx]->text().split('\t');
         QString name = fields[0];
@@ -136,19 +137,14 @@ void MainWindow::on_changeButton_clicked()
         vertLayout->addWidget(acceptChanges);
         vertLayout->addWidget(decline);
 
-		changeWidget->show();
 
         connect(acceptChanges, &QPushButton::clicked, this, &MainWindow::acceptChangesSlot);
         connect(decline, &QPushButton::clicked, changeWidget, &QWidget::close);
-		
+		changeWidget->show();
+
 		changeWidget->setLayout(vertLayout);
     	
-    	if(deletePhone)
-    	{
-    		book.remove(fields[0].toStdString());
-    		ui->contactList->removeItemWidget(selectedItems[idx]);
-    		delete selectedItems[idx];	
-		}
+
 		deletePhone = false;
         
     }
@@ -189,9 +185,20 @@ void MainWindow::acceptChangesSlot()
     {
         if (phoneNumber[i] == ',') phoneNumber.remove(i, 1);
     }
-     
-    book.insert(name.toStdString(), phoneNumber.toStdString());
-    ui->contactList->addItem(QString("‘»Œ: %1\“ÂÎ: %2").arg(name).arg(phoneNumber));
     deletePhone = true;
+    book.insert(name.toStdString(), phoneNumber.toStdString());
+    ui->contactList->addItem(QString("‘»Œ: %1\t“ÂÎ: %2").arg(name).arg(phoneNumber));
+
+    for (int idx = 0; idx < currentSellect.size(); ++idx) {
+        QStringList fields = currentSellect[idx]->text().split('\t');
+        QString name = fields[0];
+        QString phoneNumber = fields[1];
+        book.remove(fields[0].toStdString());
+        ui->contactList->removeItemWidget(currentSellect[idx]);
+        delete currentSellect[idx];
+    }
+    changeWidget->hide();
+
+
 }
 
