@@ -31,6 +31,7 @@ private slots:
     void on_addButton_clicked();
 
     void acceptChangesSlot();
+    void declineChangesSlot();
 private:
     Ui::MainWindow *ui;
 
@@ -42,6 +43,8 @@ private:
     QLineEdit *phoneNumberLineEdit;
     QPushButton *acceptChanges;
     QPushButton *decline;
+    
+    bool deletePhone;
 };
 
 #endif // MAINWINDOW_H
